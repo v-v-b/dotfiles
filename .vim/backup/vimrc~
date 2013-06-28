@@ -1,0 +1,107 @@
+"vim settings
+set nocompatible
+set shortmess+=I
+set backspace=indent,eol,start
+set history=512
+set showcmd
+set showmode
+set number
+set hidden
+set incsearch
+set hlsearch
+set guioptions-=T
+set guioptions-=L
+set guioptions-=r
+set ic
+set smartcase
+set mouse=a
+set ttymouse=xterm2
+set visualbell t_vb=
+syntax on
+colorscheme molokai 
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+"vim settings
+
+"swap, undo, backup
+if isdirectory($HOME . '/.vim/backup') == 0
+  :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
+endif
+set backupdir-=.
+set backupdir+=.
+set backupdir-=~/
+set backupdir^=~/.vim/backup/
+set backupdir^=./.vim-backup/
+set backup
+
+if isdirectory($HOME . '/.vim/swap') == 0
+  :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
+endif
+set directory=./.vim-swap//
+set directory+=~/.vim/swap//
+set directory+=~/tmp//
+set directory+=.
+
+set viminfo+=n~/.vim/viminfo
+
+if exists("+undofile")
+  if isdirectory($HOME . '/.vim/undo') == 0
+    :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+  endif
+  set undodir=./.vim-undo//
+  set undodir+=~/.vim/undo//
+  set undofile
+endif
+"swap, undo, backup
+
+
+"indents
+set ts=2 sw=2 et
+let g:indentLine_char = '|'
+"indents
+
+"Tagbar
+silent! nmap <F8> :TagbarToggle<CR>
+"Tagbar
+
+"hotkeys
+vmap <C-C> "+yi
+imap <C-V> <esc>"+gPi
+"hotkeys
+
+"pathogen
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+filetype off
+call pathogen#helptags()
+call pathogen#incubate()
+filetype plugin indent on
+"pathogen
+
+"NERDTree
+let NERDTreeIgnore=['\.swp$']
+let NERDTreeShowHidden=1
+silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
+"NERDTree
+
+"CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+"CtrlP
+
+"snipMate
+let g:snippets_dir = "~/.vim/bundle/vim-snippets/snippets"
+"snipMate
+
+"statusline setup
+set statusline=%f
+set statusline+=%{fugitive#statusline()}
+set statusline+=%{exists('g:loaded_rvm')?rvm#statusline():''}
+set statusline+=%=
+set statusline+=%c,
+set statusline+=%l/%L
+set statusline+=\ %P
+set laststatus=2
+"statusline setup
+
+"vimcommander
+noremap <silent> <F11> :cal VimCommanderToggle()<CR>
+"vimcommander
