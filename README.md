@@ -1,3 +1,3 @@
-vimfiles
+dotfiles
 ========
-.vimrc for RoR developing
+
