@@ -39,7 +39,7 @@ set splitright
 
 " ale beforeload
 " :CocConfig and add "diagnostic.displayByAle": true
-"let g:ale_disable_lsp=1
+" let g:ale_disable_lsp=1
 
 " plugins
 call plug#begin(stdpath('data') . '/plugged')
@@ -48,6 +48,7 @@ Plug 'junegunn/vim-plug'
 
 " color
 Plug 'gruvbox-community/gruvbox'
+Plug 'fcpg/vim-fahrenheit'
 
 " git
 Plug 'tpope/vim-fugitive'
@@ -64,60 +65,71 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " statusline
 Plug 'vim-airline/vim-airline'
 
+" slime for tmux
+Plug 'jgdavey/tslime.vim'
+
 " linter
 Plug 'dense-analysis/ale'
 
 " lsp
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" clojure
+" clojure repl
 Plug 'Olical/conjure', {'tag': 'v4.9.0'}
 
-" racket
+" parinfer
+Plug 'bhurlow/vim-parinfer'
+
+" autopairs
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-endwise'
+
+" color pairs
+Plug 'luochen1990/rainbow'
+
+" syntax
 Plug 'wlangstroth/vim-racket'
-
-"Plug 'tomtom/tcomment_vim'
-
-"Plug 'tpope/vim-endwise'
-"Plug 'tpope/vim-surround'
-
-"Plug 'luochen1990/rainbow'
-
-"Plug 'bhurlow/vim-parinfer'
-
-"Plug 'jgdavey/tslime.vim'
-
-"Plug 'janko/vim-test'
-"Plug 'guns/vim-sexp',    {'for': 'clojure'}
-"Plug 'venantius/vim-cljfmt'
-"Plug 'leafgarland/typescript-vim'
+Plug 'yuezk/vim-js'
+Plug 'HerringtonDarkholme/yats.vim'
+Plug 'maxmellon/vim-jsx-pretty'
 
 "Plug 'takac/vim-hardtime'
 call plug#end()
 
 " colorscheme
+set re=0
 set termguicolors
 let g:gruvbox_contrast_dark='hard'
 color gruvbox
+"color fahrenheit
 hi SignColumn guibg=' '
+let g:rainbow_active=1
 
 " airline
 let g:airline#extensions#ale#enabled=1
 "let g:airline#extensions#tabline#enabled=1
 "let g:airline#extensions#tabline#left_alt_sep='|'
 
-"vim-gitgutter
+" vim-gitgutter
 set updatetime=100
 
-"nerdtree
+" nerdtree
 map <C-n> :NERDTreeToggle<CR>
 
-"nerdtree-git-plugin
+" nerdtree-git-plugin
 let g:NERDTreeShowIgnoredStatus=1
 
 " fzf
 nnoremap <C-p> :GFiles<Cr>
 nnoremap <C-P> :Files<Cr>
+
+" tslime
+let g:tslime_always_current_session=1
+let g:tslime_always_current_window=1
+let g:tslime_autoset_pane = 1
+vmap <C-c><C-c> <Plug>SendSelectionToTmux
+nmap <C-c><C-c> <Plug>NormalModeSendToTmux
+nmap <C-c>r <Plug>SetTmuxVars
 
 " ale
 function! JokerFix(buffer) abort
@@ -126,7 +138,7 @@ function! JokerFix(buffer) abort
     \}
 endfunction
 
-execute ale#fix#registry#Add('joker', 'JokerFix', ['clojure'], 'joker format for clojure')
+execute ale#fix#registry#Add('joker', 'JokerFix', ['clojure'], 'clojure fmt')
 
 let g:ale_linters_explicit=1
 let g:ale_linters = {
@@ -161,9 +173,19 @@ inoremap <silent><expr> <TAB>
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 " <CR> to auto-select the first completion
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent> <CR> <C-r>=<SID>coc_confirm()<CR>
+function! s:coc_confirm() abort
+  if pumvisible()
+    return coc#_select_confirm()
+  else
+    return "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  endif
+endfunction
 " K to show documentation
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
@@ -184,10 +206,8 @@ vmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f :Prettier<CR>
 nmap <leader>F :Prettier<CR>:w<CR>
 
-" racket
-if has("autocmd")
-  au BufReadPost *.rkt,*.rktl set filetype=racket
-  au filetype racket set lisp
-  au filetype racket set autoindent
-endif
+" racket sicp lang
+au BufReadPost *.rkt,*.rktl set filetype=racket
+au filetype racket set lisp
+au filetype racket set autoindent
 
