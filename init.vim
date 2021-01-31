@@ -75,7 +75,7 @@ Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " clojure repl
-Plug 'Olical/conjure', {'tag': 'v4.9.0'}
+Plug 'Olical/conjure', {'tag': 'v4.13.0'}
 
 " parinfer
 Plug 'bhurlow/vim-parinfer'
@@ -121,7 +121,6 @@ let g:NERDTreeShowIgnoredStatus=1
 
 " fzf
 nnoremap <C-p> :GFiles<Cr>
-nnoremap <C-P> :Files<Cr>
 
 " tslime
 let g:tslime_always_current_session=1
@@ -145,7 +144,8 @@ let g:ale_linters = {
       \ 'clojure': ['clj-kondo', 'joker'],
       \ }
 let g:ale_fixers = {
-      \ 'clojure': ['joker']
+      \ 'clojure': ['joker'],
+      \ 'sql': ['pgformatter'],
       \ }
 let g:ale_fix_on_save=1
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s '
