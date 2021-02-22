@@ -29,3 +29,6 @@ export ANDROID_HOME="/usr/local/share/android-sdk"
 PATH="$PATH:$HOME/.local/share/nvim/plugged/vim-iced/bin"
 # asdf
 . /usr/local/opt/asdf/asdf.sh
+# JAVA_HOME
+. ~/.asdf/plugins/java/set-java-home.bash
+
