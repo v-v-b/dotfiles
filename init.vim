@@ -92,6 +92,7 @@ Plug 'wlangstroth/vim-racket'
 Plug 'yuezk/vim-js'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'slim-template/vim-slim'
 
 "Plug 'takac/vim-hardtime'
 call plug#end()
@@ -139,6 +140,7 @@ endfunction
 
 execute ale#fix#registry#Add('joker', 'JokerFix', ['clojure'], 'clojure fmt')
 
+let g:ale_sql_pgformatter_options='--wrap-limit 100 --spaces 2'
 let g:ale_linters_explicit=1
 let g:ale_linters = {
       \ 'clojure': ['clj-kondo', 'joker'],
