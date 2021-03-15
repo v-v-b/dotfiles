@@ -1,0 +1,10 @@
+[user]
+  name = v-v-b
+  email = valery.belogrivyi@gmail.com
+[pull]
+  rebase = false
+[core]
+  excludesfile = ~/.gitignore_global
+  editor = nvim
+  # win wsl-shared
+  # autocrlf = input
