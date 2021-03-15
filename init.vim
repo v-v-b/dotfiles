@@ -75,7 +75,7 @@ Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " clojure repl
-Plug 'Olical/conjure', {'tag': 'v4.13.0'}
+Plug 'Olical/conjure', {'tag': 'v4.15.0'}
 
 " parinfer
 Plug 'bhurlow/vim-parinfer'
@@ -103,7 +103,7 @@ set termguicolors
 let g:gruvbox_contrast_dark='hard'
 color gruvbox
 "color fahrenheit
-hi SignColumn guibg=' '
+hi SignColumn guibg=NONE
 let g:rainbow_active=1
 
 " airline
@@ -144,6 +144,7 @@ let g:ale_sql_pgformatter_options='--wrap-limit 100 --spaces 2'
 let g:ale_linters_explicit=1
 let g:ale_linters = {
       \ 'clojure': ['clj-kondo', 'joker'],
+      \ 'ruby': ['ruby'],
       \ }
 let g:ale_fixers = {
       \ 'clojure': ['joker'],
