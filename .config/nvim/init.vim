@@ -76,6 +76,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " clojure repl
 Plug 'Olical/conjure', {'tag': 'v4.15.0'}
+Plug 'tpope/vim-dispatch'
+Plug 'radenling/vim-dispatch-neovim'
+Plug 'clojure-vim/vim-jack-in'
 
 " parinfer
 Plug 'bhurlow/vim-parinfer'
