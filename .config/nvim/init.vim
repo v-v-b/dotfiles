@@ -33,6 +33,7 @@ set colorcolumn=80
 set mouse=a
 let mapleader=','
 let maplocalleader=','
+nnoremap <leader>s :source ~/.config/nvim/init.vim<CR>
 
 set splitbelow
 set splitright
@@ -75,7 +76,7 @@ Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " clojure repl
-Plug 'Olical/conjure', {'tag': 'v4.15.0'}
+Plug 'Olical/conjure', {'tag': 'v4.21.0'}
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'clojure-vim/vim-jack-in'
@@ -152,6 +153,8 @@ let g:ale_linters = {
 let g:ale_fixers = {
       \ 'clojure': ['joker'],
       \ 'sql': ['pgformatter'],
+      \ 'python': ['autopep8'],
+      \ 'java': ['google_java_format'],
       \ }
 let g:ale_fix_on_save=1
 let g:ale_echo_msg_format = '[%linter%][%severity%] %s '
@@ -165,6 +168,9 @@ let g:coc_global_extensions = [
       \ 'coc-tsserver',
       \ 'coc-prettier',
       \ 'coc-eslint',
+      \ 'coc-stylelintplus',
+      \ 'coc-pyright',
+      \ 'coc-java',
       \]
 " code navigation
 nmap <silent> gd <Plug>(coc-definition)
