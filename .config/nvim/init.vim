@@ -76,7 +76,7 @@ Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " clojure repl
-Plug 'Olical/conjure', {'tag': 'v4.21.0'}
+Plug 'Olical/conjure', {'tag': 'v4.22.0'}
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'clojure-vim/vim-jack-in'
