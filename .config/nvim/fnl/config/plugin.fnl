@@ -25,6 +25,8 @@
   :lewis6991/impatient.nvim {}
 
   :nvim-treesitter/nvim-treesitter {:run ":TSUpdate" :mod :treesitter}
+  :wlangstroth/vim-racket {}
+
   :neovim/nvim-lspconfig {:mod :lspconfig}
   :williamboman/nvim-lsp-installer {}
   :jose-elias-alvarez/null-ls.nvim {:requires [:nvim-lua/plenary.nvim]}
@@ -44,6 +46,7 @@
                                        :radenling/vim-dispatch-neovim]}
 
   :lewis6991/gitsigns.nvim {:mod :gitsigns}
+  :junegunn/vim-easy-align {:mod :easy-align}
 
   :gruvbox-community/gruvbox {:mod :colorscheme}
   :nvim-lualine/lualine.nvim {:mod :statusline})

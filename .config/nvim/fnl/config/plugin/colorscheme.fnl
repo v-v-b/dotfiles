@@ -7,3 +7,5 @@
 (nvim.ex.hi "Normal guibg=0")
 (nvim.ex.hi "SignColumn guibg=0")
 (nvim.ex.hi "ColorColumn guibg=gray6")
+
+(nvim.ex.au "BufReadPost *.rkt,*.rktl set filetype=racket")
