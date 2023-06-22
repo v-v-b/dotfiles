@@ -1,3 +1,3 @@
-{:user {:plugins [[cider/cider-nrepl "0.28.6"]
-                  [refactor-nrepl "3.5.5"]]
+{:user {:plugins [[cider/cider-nrepl "0.30.0"]
+                  [refactor-nrepl "3.6.0"]]
         :global-vars {*warn-on-reflection* true}}}

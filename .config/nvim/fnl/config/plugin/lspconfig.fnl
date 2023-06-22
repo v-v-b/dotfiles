@@ -15,16 +15,17 @@
     (nvim.buf_set_keymap buf :n :<leader>lr ":lua vim.lsp.buf.rename()<cr>" {:noremap true})
     (nvim.buf_set_keymap buf :n :<leader>lf ":lua vim.diagnostic.open_float()<cr>" {:noremap true})
     (nvim.buf_set_keymap buf :n :<leader>lq ":lua vim.diagnostic.setloclist()<cr>" {:noremap true})
-    (nvim.buf_set_keymap buf :n :<localleader>ff ":lua vim.lsp.buf.formatting()<cr>" {:noremap true})
-    (nvim.buf_set_keymap buf :v :<localleader>ff ":lua vim.lsp.buf.range_formatting()<cr>" {:noremap true})
+    (nvim.buf_set_keymap buf :n :<localleader>ff ":lua vim.lsp.buf.format()<cr>" {:noremap true})
+    (nvim.buf_set_keymap buf :v :<localleader>ff ":lua vim.lsp.buf.format()<cr>" {:noremap true})
     (nvim.buf_set_keymap buf :n :<c-k> ":lua vim.lsp.buf.signature_help()<cr>" {:noremap true})
     (nvim.buf_set_keymap buf :n :<c-n> ":lua vim.diagnostic.goto_next()<cr>" {:noremap true})
     (nvim.buf_set_keymap buf :n :<c-p> ":lua vim.diagnostic.goto_prev()<cr>" {:noremap true})))
 
 (defn- set-formatters [client]
+  (set client.server_capabilities.semanticTokensProvider nil)
   (when (= client.name :tsserver)
-    (set client.resolved_capabilities.document_formatting false)
-    (set client.resolved_capabilities.document_range_formatting false)))
+    (set client.server_capabilities.document_formatting false)
+    (set client.server_capabilities.document_range_formatting false)))
 
 (nl.setup
   {:sources [(nl.builtins.diagnostics.eslint.with    {:prefer_local :node_modules/.bin})
@@ -33,7 +34,7 @@
 
 (li.on_server_ready
   (fn [srv]
-    (srv:setup {:capabilities (cnl.update_capabilities
+    (srv:setup {:capabilities (cnl.default_capabilities
                                 (vim.lsp.protocol.make_client_capabilities))
                 :on_attach (fn [client bufnr]
                              (do

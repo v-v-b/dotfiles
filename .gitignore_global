@@ -5,3 +5,5 @@
 .clj-kondo
 .lsp
 .cpcache
+solargraph_config.rb
+
