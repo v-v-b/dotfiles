@@ -1,34 +1,18 @@
--- ref https://github.com/Olical/dotfiles
+local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/'
 
--- neovim config entrypoint,
--- bootstraps packer and aniseed
--- to compile and load fnl/init.fnl.
+local function ensure_installed(plugin_ref)
+  local plugin_name = vim.split(plugin_ref, '/')[2]
+  local install_path = packer_install_path .. plugin_name
 
-local execute = vim.api.nvim_command
-local fn = vim.fn
+  if vim.loop.fs_stat(install_path) then return end
 
-local pack_path = fn.stdpath("data") .. "/site/pack"
-local fmt = string.format
-
-function ensure (user, repo)
-  local install_path = fmt("%s/packer/start/%s", pack_path, repo)
-  if fn.empty(fn.glob(install_path)) > 0 then
-    execute(fmt("!git clone https://github.com/%s/%s %s", user, repo, install_path))
-    execute(fmt("packadd %s", repo))
-  end
+  vim.fn.system({ 'git', 'clone',
+    'https://github.com/' .. plugin_ref, install_path })
+  vim.cmd.packadd(plugin_name)
 end
 
--- bootstrap essential plugins
-ensure("wbthomason", "packer.nvim")
-ensure("Olical", "aniseed")
-ensure("lewis6991", "impatient.nvim")
+ensure_installed('rktjmp/hotpot.nvim')
+ensure_installed('wbthomason/packer.nvim')
 
--- pre-compile and cache lua modules
-require("impatient")
-
--- compile and load fennel modules
-vim.g["aniseed#env"] = {
-  module = "config.init",
-  compile = true
-}
-
+require("hotpot")
+require("user")

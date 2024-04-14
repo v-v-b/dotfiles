@@ -6,4 +6,5 @@
 .lsp
 .cpcache
 solargraph_config.rb
+local-*
 

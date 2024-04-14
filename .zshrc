@@ -28,6 +28,8 @@ bindkey -e
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 . ~/.asdf/plugins/java/set-java-home.zsh
+export CPATH=/opt/homebrew/include:$CPATH
+export LIBRARY_PATH=/opt/homebrew/lib:$LIBRARY_PATH
 
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
