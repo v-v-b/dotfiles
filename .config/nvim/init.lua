@@ -1,18 +1,28 @@
-local packer_install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/'
+local function ensure_installed(plugin, branch)
+  local repo = vim.split(plugin, '/')[2]
+  local path = vim.fn.stdpath('data') .. '/lazy/' .. repo
 
-local function ensure_installed(plugin_ref)
-  local plugin_name = vim.split(plugin_ref, '/')[2]
-  local install_path = packer_install_path .. plugin_name
+  if not (vim.uv or vim.loop).fs_stat(path) then
+    vim.fn.system({
+      'git',
+      'clone',
+      '--filter=blob:none',
+      '--branch=' .. branch,
+      'https://github.com/' .. plugin .. '.git',
+      path
+    })
+  end
 
-  if vim.loop.fs_stat(install_path) then return end
-
-  vim.fn.system({ 'git', 'clone',
-    'https://github.com/' .. plugin_ref, install_path })
-  vim.cmd.packadd(plugin_name)
+  return path
 end
 
-ensure_installed('rktjmp/hotpot.nvim')
-ensure_installed('wbthomason/packer.nvim')
+vim.opt.runtimepath:prepend({
+  ensure_installed('rktjmp/hotpot.nvim', 'v0.14.7'),
+  ensure_installed('folke/lazy.nvim', 'stable')
+})
 
-require("hotpot")
-require("user")
+vim.loader.enable()
+
+require ('hotpot')
+require('config')
+

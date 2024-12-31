@@ -7,4 +7,4 @@
 .cpcache
 solargraph_config.rb
 local-*
-
+.venv

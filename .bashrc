@@ -1,5 +1,3 @@
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 alias ls='ls -G'
 alias gst='git status'
 alias ll='ls -lah'
@@ -22,13 +20,8 @@ markup_git_branch() {
 
 export PS1=" \[\033[01;32m\]\u@\h\[\033[00m\] \w\$(markup_git_branch \$(parse_git_branch)) $ "
 
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-export ANDROID_HOME="/usr/local/share/android-sdk"
-
-# vim-iced executable
-PATH="$PATH:$HOME/.local/share/nvim/plugged/vim-iced/bin"
 # asdf
-. /usr/local/opt/asdf/asdf.sh
+. /opt/asdf-vm/asdf.sh
 # JAVA_HOME
 . ~/.asdf/plugins/java/set-java-home.bash
 
