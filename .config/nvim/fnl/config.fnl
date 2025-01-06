@@ -9,6 +9,7 @@
                    :relativenumber true
                    :colorcolumn :80
                    :pumheight 5
+                   :cmdheight 0
                    :shiftwidth 2
                    :tabstop 2
                    :softtabstop 2
@@ -55,8 +56,28 @@
                        :indent {:enable true}
                        :highlight {:enable true
                                    :additional_vim_regex_highlighting false}}}
+               {1 :nvim-telescope/telescope.nvim
+                :branch :0.1.x
+                :dependencies [:nvim-lua/plenary.nvim
+                               {1 :nvim-telescope/telescope-fzf-native.nvim
+                                :build :make}]
+                :config (fn []
+                          (let [t (require :telescope)
+                                tb (require :telescope.builtin)
+                                vks vim.keymap.set]
+                            (t.setup {:extensions {:fzf {:fuzzy true
+                                                         :override_generic_sorter true
+                                                         :override_file_sorter true
+                                                         :case_mode :smart_case}}})
+                            (vks :n :<leader>ff tb.find_files)
+                            (vks :n :<leader>fw tb.grep_string)
+                            (vks :n :<leader>fs tb.live_grep)
+                            (vks :n :<leader>fd tb.diagnostics)
+                            (vks :n :<leader><leader> tb.buffers)
+                            (t.load_extension :fzf)))}
                {1 :Olical/conjure
-                :dependencies [:PaterJason/cmp-conjure]
+                :dependencies [:PaterJason/cmp-conjure
+                               :clojure-vim/vim-jack-in]
                 :init (fn []
                         ;(set vim.g.conjure#debug true)
                         (set vim.g.conjure#client_on_load false)
@@ -68,6 +89,10 @@
                                "love ."))
                         (set vim.g.conjure#client#sql#stdio#command
                              (.. :sh " " (vim.fn.getcwd) :/local-psql)))}
+               {1 :dundalek/parpar.nvim
+                :dependencies [:gpanders/nvim-parinfer
+                               :julienvincent/nvim-paredit]
+                :opts {}}
                {1 :hrsh7th/nvim-cmp
                 :event :InsertEnter
                 :dependencies [:hrsh7th/cmp-nvim-lsp
