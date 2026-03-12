@@ -90,8 +90,22 @@
                         (set vim.g.conjure#client#sql#stdio#command
                              (.. :sh " " (vim.fn.getcwd) :/local-psql)))}
                {1 :dundalek/parpar.nvim
-                :dependencies [:gpanders/nvim-parinfer
-                               :julienvincent/nvim-paredit]
+                :dependencies [{1 :gpanders/nvim-parinfer
+                                :init (fn []
+                                        (set vim.g.parinfer_filetypes
+                                             [:clojure
+                                              :scheme
+                                              :lisp
+                                              :racket
+                                              :fennel
+                                              :wat]))}
+                               {1 :julienvincent/nvim-paredit
+                                :opts {:filetypes [:clojure
+                                                   :fennel
+                                                   :scheme
+                                                   :lisp
+                                                   :racket
+                                                   :wat]}}]
                 :opts {}}
                {1 :hrsh7th/nvim-cmp
                 :event :InsertEnter
@@ -116,13 +130,14 @@
                                :nvim-lua/plenary.nvim
                                :jay-babu/mason-null-ls.nvim]
                 :config (fn []
-                          (let [lsp (require :lspconfig)
+                          (let [lsp vim.lsp.config
                                 m (require :mason)
                                 ml (require :mason-lspconfig)
                                 nl (require :null-ls)
                                 mnl (require :mason-null-ls)
                                 capabilities ((. (require :cmp_nvim_lsp)
                                                  :default_capabilities))]
+                            (lsp "wasm_language_tools" {})
                             (m.setup)
                             (ml.setup {:handlers [(fn [server]
                                                     ((. lsp server :setup) {: capabilities}))]})

@@ -9,7 +9,9 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 export HOMEBREW_NO_ANALYTICS=1
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+export HOMEBREW_NO_EMOJI=1
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+# . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 #. ~/.asdf/plugins/java/set-java-home.zsh # slooooow
 asdf_update_java_home() {
@@ -32,6 +34,7 @@ alias gst='git status'
 alias ll='ls -lah'
 alias la='ls -A'
 alias v=nvim
+alias c=codium
 
 # FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 FPATH="/opt/homebrew/share/zsh/site-functions:${FPATH}"
