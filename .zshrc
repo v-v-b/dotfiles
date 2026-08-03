@@ -1,6 +1,7 @@
 export EDITOR=nvim
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export HF_HOME="$HOME/models"
 
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
@@ -10,8 +11,9 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_EMOJI=1
-export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
 # . /opt/homebrew/opt/asdf/libexec/asdf.sh
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 #. ~/.asdf/plugins/java/set-java-home.zsh # slooooow
 asdf_update_java_home() {
@@ -29,12 +31,11 @@ add-zsh-hook chpwd asdf_update_java_home
 asdf_update_java_home
 #. ~/.asdf/plugins/java/set-java-home.zsh # slooooow
 
-alias ls='ls -G'
 alias gst='git status'
 alias ll='ls -lah'
-alias la='ls -A'
 alias v=nvim
 alias c=codium
+. ~/.zsh_aliases
 
 # FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 FPATH="/opt/homebrew/share/zsh/site-functions:${FPATH}"

@@ -1,145 +1,89 @@
-(each [k v (pairs {:mapleader " "
-                   :maplocalleader ","
-                   :netrw_banner 0
-                   :netrw_liststyle 3})]
-  (tset vim.g k v))
+(fn configure [target settings]
+  (each [key value (pairs settings)]
+    (set (. target key) value)))
 
-(each [k v (pairs {:termguicolors true
-                   :wrap false
-                   :relativenumber true
-                   :colorcolumn :80
-                   :pumheight 5
-                   :cmdheight 0
-                   :shiftwidth 2
-                   :tabstop 2
-                   :softtabstop 2
-                   :expandtab true
-                   :splitright true
-                   :splitbelow true
-                   :ignorecase true
-                   :smartcase true
-                   :list true
-                   :listchars "eol:¬,tab:■■,trail:█"
-                   :swapfile false
-                   :backup false
-                   :writebackup false})]
-  (tset vim.opt k v))
+(vim.pack.add ["https://github.com/bettervim/yugen.nvim"
+               "https://github.com/romus204/tree-sitter-manager.nvim"
+               "https://github.com/Olical/conjure"
+               "https://github.com/hrsh7th/nvim-cmp"
+               "https://github.com/PaterJason/cmp-conjure"
+               "https://github.com/hrsh7th/cmp-nvim-lsp"
+               "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help"
+               "https://github.com/hrsh7th/cmp-buffer"
+               "https://github.com/hrsh7th/cmp-path"
+               "https://github.com/neovim/nvim-lspconfig"
+               "https://github.com/mason-org/mason.nvim"
+               "https://github.com/mason-org/mason-lspconfig.nvim"
+               "https://github.com/nvim-lua/plenary.nvim"
+               "https://github.com/nvimtools/none-ls.nvim"
+               "https://github.com/ibhagwan/fzf-lua"
+               "https://github.com/julienvincent/nvim-paredit"])
 
-(vim.schedule (fn [] (set vim.opt.clipboard :unnamedplus)))
+(vim.schedule #(vim.opt.clipboard:append :unnamedplus))
 
-(let [vks vim.keymap.set
-      vd vim.diagnostic
-      vlb vim.lsp.buf
-      callback (fn [{:buf buffer}]
-                 (vks :n :gd vlb.definition {: buffer})
-                 (vks :n :gD vlb.declaration {: buffer})
-                 (vks :n :gi vlb.implementation {: buffer})
-                 (vks :n :gr vlb.references {: buffer})
-                 (vks :n :<leader>of vd.open_float {: buffer})
-                 (vks :n :<leader>ca vlb.code_action {: buffer})
-                 (vks :n :<leader>rn vlb.rename {: buffer})
-                 (vks [:n :v] :<leader>ws vlb.workspace_symbol {: buffer})
-                 (vks [:n :v] :<localleader>f vlb.format {: buffer}))]
-  (vim.api.nvim_create_autocmd :LspAttach {: callback}))
+(configure vim.g {:mapleader " "
+                  :maplocalleader ","
+                  :netrw_banner 0
+                  :netrw_liststyle 3
+                  "conjure#mapping#doc_word" :gk})
 
-(let [lazy (require :lazy)]
-  (lazy.setup [:rktjmp/hotpot.nvim
-               {1 :bettervim/yugen.nvim
-                :init (fn []
-                        (vim.cmd.colorscheme :yugen)
-                        (vim.cmd.hi "colorcolumn guibg=#101010"))}
-               {1 :nvim-treesitter/nvim-treesitter
-                :build ":TSUpdate"
-                :main :nvim-treesitter.configs
-                :opts {:auto_install true
-                       :sync_install false
-                       :indent {:enable true}
-                       :highlight {:enable true
-                                   :additional_vim_regex_highlighting false}}}
-               {1 :nvim-telescope/telescope.nvim
-                :branch :0.1.x
-                :dependencies [:nvim-lua/plenary.nvim
-                               {1 :nvim-telescope/telescope-fzf-native.nvim
-                                :build :make}]
-                :config (fn []
-                          (let [t (require :telescope)
-                                tb (require :telescope.builtin)
-                                vks vim.keymap.set]
-                            (t.setup {:extensions {:fzf {:fuzzy true
-                                                         :override_generic_sorter true
-                                                         :override_file_sorter true
-                                                         :case_mode :smart_case}}})
-                            (vks :n :<leader>ff tb.find_files)
-                            (vks :n :<leader>fw tb.grep_string)
-                            (vks :n :<leader>fs tb.live_grep)
-                            (vks :n :<leader>fd tb.diagnostics)
-                            (vks :n :<leader><leader> tb.buffers)
-                            (t.load_extension :fzf)))}
-               {1 :Olical/conjure
-                :dependencies [:PaterJason/cmp-conjure
-                               :clojure-vim/vim-jack-in]
-                :init (fn []
-                        ;(set vim.g.conjure#debug true)
-                        (set vim.g.conjure#client_on_load false)
-                        (set vim.g.conjure#mapping#doc_word :gk)
-                        (when (vim.uv.fs_stat (.. (vim.fn.getcwd) :/.love2d))
-                          (set vim.g.conjure#filetype#fennel
-                               :conjure.client.fennel.stdio)
-                          (set vim.g.conjure#client#fennel#stdio#command
-                               "love ."))
-                        (set vim.g.conjure#client#sql#stdio#command
-                             (.. :sh " " (vim.fn.getcwd) :/local-psql)))}
-               {1 :dundalek/parpar.nvim
-                :dependencies [{1 :gpanders/nvim-parinfer
-                                :init (fn []
-                                        (set vim.g.parinfer_filetypes
-                                             [:clojure
-                                              :scheme
-                                              :lisp
-                                              :racket
-                                              :fennel
-                                              :wat]))}
-                               {1 :julienvincent/nvim-paredit
-                                :opts {:filetypes [:clojure
-                                                   :fennel
-                                                   :scheme
-                                                   :lisp
-                                                   :racket
-                                                   :wat]}}]
-                :opts {}}
-               {1 :hrsh7th/nvim-cmp
-                :event :InsertEnter
-                :dependencies [:hrsh7th/cmp-nvim-lsp
-                               :hrsh7th/cmp-path
-                               :hrsh7th/cmp-buffer
-                               :hrsh7th/cmp-nvim-lsp-signature-help]
-                :config (fn []
-                          (let [cmp (require :cmp)]
-                            (cmp.setup {:snippet {:expand (fn [{: body}]
-                                                            (vim.snippet.expand body))}
-                                        :mapping (cmp.mapping.preset.insert {})
-                                        :sources (cmp.config.sources [{:name :nvim_lsp}
-                                                                      {:name :nvim_lsp_signature_help}
-                                                                      {:name :path}
-                                                                      {:name :conjure}]
-                                                                     [{:name :buffer}])})))}
-               {1 :neovim/nvim-lspconfig
-                :dependencies [{1 :williamboman/mason.nvim :config true}
-                               :williamboman/mason-lspconfig.nvim
-                               :nvimtools/none-ls.nvim
-                               :nvim-lua/plenary.nvim
-                               :jay-babu/mason-null-ls.nvim]
-                :config (fn []
-                          (let [lsp vim.lsp.config
-                                m (require :mason)
-                                ml (require :mason-lspconfig)
-                                nl (require :null-ls)
-                                mnl (require :mason-null-ls)
-                                capabilities ((. (require :cmp_nvim_lsp)
-                                                 :default_capabilities))]
-                            (lsp "wasm_language_tools" {})
-                            (m.setup)
-                            (ml.setup {:handlers [(fn [server]
-                                                    ((. lsp server :setup) {: capabilities}))]})
-                            (mnl.setup {:handlers {}})
-                            (nl.setup {:sources [nl.builtins.formatting.fnlfmt]})))}]))
+(configure vim.opt {:termguicolors true
+                    :wrap false
+                    :relativenumber true
+                    :colorcolumn :80
+                    :signcolumn "yes:1"
+                    :pumheight 5
+                    :cmdheight 0
+                    :shiftwidth 2
+                    :softtabstop -1
+                    :expandtab true
+                    :splitright true
+                    :splitbelow true
+                    :ignorecase true
+                    :smartcase true
+                    :list true
+                    :listchars {:eol "¬" :tab "■■" :trail "█" :nbsp "+"}
+                    :swapfile false
+                    :writebackup false})
+
+(vim.cmd.colorscheme :yugen)
+(vim.api.nvim_set_hl 0 :ColorColumn {:bg "#101010"})
+
+((. (require :tree-sitter-manager) :setup) {:nerdfont false})
+((. (require :nvim-paredit) :setup) {})
+
+(let [fzf (require :fzf-lua)
+      map #(vim.keymap.set :n $1 $2 {:silent true :desc $3})]
+  (fzf.setup {:grep {:rg_opts (.. "--hidden --glob='!.git/**' "
+                                  fzf.config.defaults.grep.rg_opts)}})
+  (map :<leader>ff #(fzf.files) "Find files")
+  (map :<leader>fg #(fzf.live_grep) "Live grep")
+  (map :<leader>fb #(fzf.buffers) :Buffers)
+  (map :<leader>fr #(fzf.resume) "Resume search"))
+
+(let [cmp (require :cmp)]
+  (cmp.setup {:mapping (cmp.mapping.preset.insert {})
+              :sources [{:name :conjure}
+                        {:name :nvim_lsp}
+                        {:name :nvim_lsp_signature_help}
+                        {:name :buffer}
+                        {:name :path}]}))
+
+(vim.lsp.config "*"
+                {:capabilities ((. (require :cmp_nvim_lsp)
+                                   :default_capabilities))})
+
+((. (require :mason) :setup) {})
+((. (require :mason-lspconfig) :setup) {})
+
+(let [nl (require :null-ls)]
+  (nl.setup {:sources [nl.builtins.formatting.fnlfmt]}))
+
+(fn lsp-keymap [event]
+  (let [map #(vim.keymap.set $1 $2 $3 {:buffer event.buf :silent true :desc $4})]
+    (map :n :gd vim.lsp.buf.definition "LSP: definition")
+    (map [:n :v] :<leader>f
+         #(vim.lsp.buf.format {:async true :bufnr event.buf}) "LSP: format")
+    (map :n :<leader>d vim.diagnostic.open_float "Diagnostics: current line")))
+
+(vim.api.nvim_create_autocmd :LspAttach {:callback lsp-keymap})

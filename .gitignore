@@ -1,3 +1,7 @@
 .lein/repl-history
 .lein/self-installs/
 
+.config/nvim/lua/
+
+.emacs.d/eln-cache/
+.emacs.d/elpa/
